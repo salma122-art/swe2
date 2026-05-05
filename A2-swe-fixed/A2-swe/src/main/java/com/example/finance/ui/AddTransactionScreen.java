@@ -1,6 +1,9 @@
 package com.example.finance.ui;
 
+import java.util.Date;
+
 import com.example.finance.controllers.AppContext;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,8 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.util.Date;
 
 public class AddTransactionScreen extends Application {
 
@@ -53,23 +54,9 @@ public class AddTransactionScreen extends Application {
                     messageLabel.setText("Please fill all fields");
                     return;
                 }
-try {
-    double amount = Double.parseDouble(amountText.trim());
-    int categoryId = Integer.parseInt(categoryText.trim());
 
-    boolean success = AppContext.financeController.addTransaction(
-            amount, type, categoryId, new Date(), notes
-    );
-
-    if (success) {
-        messageLabel.setText("Transaction added successfully");
-    } else {
-        messageLabel.setText("Failed to add transaction");
-    }
-
-} catch (NumberFormatException ex) {
-    messageLabel.setText("⚠ Enter valid numbers only (Amount: 100, Category: 1)");
-}
+                double amount = Double.parseDouble(amountText.trim());
+                int categoryId = Integer.parseInt(categoryText.trim());
 
                 boolean success = AppContext.financeController.addTransaction(
                         amount, type, categoryId, new Date(), notes
@@ -86,7 +73,7 @@ try {
                 }
 
             } catch (NumberFormatException ex) {
-                messageLabel.setText("Invalid number format");
+                messageLabel.setText("⚠ Enter valid numbers only (Amount: 100, Category: 1)");
             }
         });
 
