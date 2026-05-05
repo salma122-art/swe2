@@ -53,9 +53,23 @@ public class AddTransactionScreen extends Application {
                     messageLabel.setText("Please fill all fields");
                     return;
                 }
+try {
+    double amount = Double.parseDouble(amountText.trim());
+    int categoryId = Integer.parseInt(categoryText.trim());
 
-                double amount = Double.parseDouble(amountText);
-                int categoryId = Integer.parseInt(categoryText);
+    boolean success = AppContext.financeController.addTransaction(
+            amount, type, categoryId, new Date(), notes
+    );
+
+    if (success) {
+        messageLabel.setText("Transaction added successfully");
+    } else {
+        messageLabel.setText("Failed to add transaction");
+    }
+
+} catch (NumberFormatException ex) {
+    messageLabel.setText("⚠ Enter valid numbers only (Amount: 100, Category: 1)");
+}
 
                 boolean success = AppContext.financeController.addTransaction(
                         amount, type, categoryId, new Date(), notes
