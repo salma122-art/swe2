@@ -168,6 +168,9 @@ public class DashboardScreen extends Application {
         Button budgetBtn =
                 new Button("Budget");
 
+        Button darkModeBtn =
+                new Button("Dark Mode");
+
         Button logoutBtn =
                 new Button("Logout");
 
@@ -181,6 +184,7 @@ public class DashboardScreen extends Application {
                 refreshBtn,
                 reportBtn,
                 budgetBtn,
+                darkModeBtn,
                 logoutBtn
         );
 
@@ -353,26 +357,6 @@ public class DashboardScreen extends Application {
         });
 
         // =================================================
-        // LOGOUT
-        // =================================================
-
-        logoutBtn.setOnAction(e -> {
-
-            try {
-
-                AppContext.financeController =
-                        null;
-
-                new LoginScreen()
-                        .start(stage);
-
-            } catch (Exception ex) {
-
-                ex.printStackTrace();
-            }
-        });
-
-        // =================================================
         // ROOT
         // =================================================
 
@@ -392,8 +376,50 @@ public class DashboardScreen extends Application {
                 buttons
         );
 
-        Scene scene =
+        final Scene scene =
                 new Scene(root, 900, 550);
+
+        // =================================================
+        // DARK MODE
+        // =================================================
+
+        darkModeBtn.setOnAction(e -> {
+
+            if (scene.getStylesheets().isEmpty()) {
+
+                scene.getStylesheets().add(
+                        getClass()
+                                .getResource(
+                                        "/static/dark-theme.css"
+                                )
+                                .toExternalForm()
+                );
+
+            } else {
+
+                scene.getStylesheets().clear();
+            }
+        });
+
+        // =================================================
+        // LOGOUT
+        // =================================================
+
+        logoutBtn.setOnAction(e -> {
+
+            try {
+
+                AppContext.financeController =
+                        null;
+
+                new LoginScreen()
+                        .start(stage);
+
+            } catch (Exception ex) {
+
+                ex.printStackTrace();
+            }
+        });
 
         stage.setTitle(
                 "Dashboard"
