@@ -13,42 +13,59 @@ public class NotificationService {
      */
     public void sendBudgetAlert() {
 
-        Alert alert =
-                new Alert(AlertType.WARNING);
+        try {
 
-        alert.setTitle("Budget Alert");
+            Alert alert =
+                    new Alert(AlertType.WARNING);
 
-        alert.setHeaderText(
-                "Budget Limit Exceeded"
-        );
+            alert.setTitle("Budget Alert");
 
-        alert.setContentText(
-                "Warning: Budget limit exceeded!"
-        );
+            alert.setHeaderText(
+                    "Budget Limit Exceeded"
+            );
 
-        alert.showAndWait();
+            alert.setContentText(
+                    "Warning: Budget limit exceeded!"
+            );
+
+            alert.showAndWait();
+
+        } catch (Throwable e) {
+
+            System.out.println(
+                    "Budget Warning: Budget limit exceeded!"
+            );
+        }
     }
 
     /**
      * Popup alert when budget is almost exceeded.
      */
-    public void sendBudgetWarning(String month) {
+    public void sendBudgetWarningAlert() {
 
-        Alert alert =
-                new Alert(AlertType.WARNING);
+        try {
 
-        alert.setTitle("Budget Warning");
+            Alert alert =
+                    new Alert(AlertType.WARNING);
 
-        alert.setHeaderText(
-                "Budget Almost Exceeded"
-        );
+            alert.setTitle("Budget Warning");
 
-        alert.setContentText(
-                "Warning: Budget is almost exceeded for month "
-                        + month
-        );
+            alert.setHeaderText(
+                    "Budget Almost Exceeded"
+            );
 
-        alert.showAndWait();
+            alert.setContentText(
+                    "Warning: Budget is almost exceeded!"
+            );
+
+            alert.showAndWait();
+
+        } catch (Throwable e) {
+
+            System.out.println(
+                    "Budget Warning: Budget is almost exceeded!"
+            );
+        }
     }
 
     /**
@@ -57,16 +74,25 @@ public class NotificationService {
     public void showSuccessNotification(
             String message) {
 
-        Alert alert =
-                new Alert(AlertType.INFORMATION);
+        try {
 
-        alert.setTitle("Success");
+            Alert alert =
+                    new Alert(AlertType.INFORMATION);
 
-        alert.setHeaderText(null);
+            alert.setTitle("Success");
 
-        alert.setContentText(message);
+            alert.setHeaderText(null);
 
-        alert.showAndWait();
+            alert.setContentText(message);
+
+            alert.showAndWait();
+
+        } catch (Throwable e) {
+
+            System.out.println(
+                    "SUCCESS: " + message
+            );
+        }
     }
 
     /**
@@ -75,16 +101,25 @@ public class NotificationService {
     public void showErrorNotification(
             String message) {
 
-        Alert alert =
-                new Alert(AlertType.ERROR);
+        try {
 
-        alert.setTitle("Error");
+            Alert alert =
+                    new Alert(AlertType.ERROR);
 
-        alert.setHeaderText(null);
+            alert.setTitle("Error");
 
-        alert.setContentText(message);
+            alert.setHeaderText(null);
 
-        alert.showAndWait();
+            alert.setContentText(message);
+
+            alert.showAndWait();
+
+        } catch (Throwable e) {
+
+            System.out.println(
+                    "ERROR: " + message
+            );
+        }
     }
 
     /**

@@ -1,12 +1,5 @@
 [
   {
-    "source": "Manual Income",
-    "transactionId": 1,
-    "amount": 5000.0,
-    "date": "May 7, 2026, 5:14:05 PM",
-    "notes": "salary"
-  },
-  {
     "categoryId": 1,
     "transactionId": 2,
     "amount": 100.0,
@@ -26,5 +19,138 @@
     "amount": 1000.0,
     "date": "May 7, 2026, 5:36:32 PM",
     "notes": "food"
+  },
+  {
+    "source": "Manual Income",
+    "transactionId": 5,
+    "amount": 1000.0,
+    "date": "May 7, 2026, 6:31:57 PM",
+    "notes": "Salary"
+  },
+  {
+    "source": "Manual Income",
+    "transactionId": 6,
+    "amount": 2000.0,
+    "date": "May 7, 2026, 6:31:57 PM",
+    "notes": "Salary"
+  },
+  {
+    "source": "Manual Income",
+    "transactionId": 7,
+    "amount": 1000.0,
+    "date": "May 7, 2026, 6:31:58 PM",
+    "notes": "Salary"
+  },
+  {
+    "source": "Manual Income",
+    "transactionId": 8,
+    "amount": 1000.0,
+    "date": "May 7, 2026, 6:31:58 PM",
+    "notes": "Salary"
+  },
+  {
+    "source": "Manual Income",
+    "transactionId": 8,
+    "amount": 1000.0,
+    "date": "May 7, 2026, 6:38:27 PM",
+    "notes": "Salary"
+  },
+  {
+    "source": "Manual Income",
+    "transactionId": 9,
+    "amount": 2000.0,
+    "date": "May 7, 2026, 6:38:27 PM",
+    "notes": "Salary"
+  },
+  {
+    "source": "Manual Income",
+    "transactionId": 10,
+    "amount": 2000.0,
+    "date": "May 7, 2026, 6:38:27 PM",
+    "notes": "Updated Salary"
+  },
+  {
+    "source": "Manual Income",
+    "transactionId": 11,
+    "amount": 1000.0,
+    "date": "May 7, 2026, 6:43:12 PM",
+    "notes": "Salary"
+  },
+  {
+    "source": "Manual Income",
+    "transactionId": 12,
+    "amount": 2000.0,
+    "date": "May 7, 2026, 6:43:12 PM",
+    "notes": "Salary"
+  },
+  {
+    "source": "Manual Income",
+    "transactionId": 13,
+    "amount": 2000.0,
+    "date": "May 7, 2026, 6:43:12 PM",
+    "notes": "Updated Salary"
+  },
+  {
+    "source": "Manual Income",
+    "transactionId": 14,
+    "amount": 1000.0,
+    "date": "May 7, 2026, 6:44:50 PM",
+    "notes": "Salary"
+  },
+  {
+    "source": "Manual Income",
+    "transactionId": 15,
+    "amount": 2000.0,
+    "date": "May 7, 2026, 6:44:50 PM",
+    "notes": "Salary"
+  },
+  {
+    "source": "Manual Income",
+    "transactionId": 16,
+    "amount": 2000.0,
+    "date": "May 7, 2026, 6:44:50 PM",
+    "notes": "Updated Salary"
+  },
+  {
+    "source": "Manual Income",
+    "transactionId": 17,
+    "amount": 1000.0,
+    "date": "May 7, 2026, 6:46:51 PM",
+    "notes": "Salary"
+  },
+  {
+    "source": "Manual Income",
+    "transactionId": 18,
+    "amount": 2000.0,
+    "date": "May 7, 2026, 6:46:51 PM",
+    "notes": "Salary"
+  },
+  {
+    "categoryId": 1,
+    "transactionId": 19,
+    "amount": 500.0,
+    "date": "May 7, 2026, 6:46:51 PM",
+    "notes": "Food"
+  },
+  {
+    "source": "Manual Income",
+    "transactionId": 20,
+    "amount": 2000.0,
+    "date": "May 7, 2026, 6:46:52 PM",
+    "notes": "Updated Salary"
+  },
+  {
+    "source": "Manual Income",
+    "transactionId": 21,
+    "amount": 5000.0,
+    "date": "May 7, 2026, 6:49:13 PM",
+    "notes": ""
+  },
+  {
+    "categoryId": 2,
+    "transactionId": 22,
+    "amount": 50000.0,
+    "date": "May 7, 2026, 6:49:24 PM",
+    "notes": ""
   }
 ]

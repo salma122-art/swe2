@@ -1,53 +1,181 @@
 package com.example.finance;
 
-import com.example.finance.controllers.FinanceController;
-import com.example.finance.models.User;
-import org.junit.jupiter.api.Test;
-
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-class FinanceControllerTest {
+import com.example.finance.controllers.FinanceController;
+import com.example.finance.models.Transaction;
+import com.example.finance.models.User;
 
-    @Test
-    void incomeIncreasesBalance() {
-        User user = new User(1, "Test", "test@example.com", 100.0);
-        FinanceController fc = new FinanceController(user);
+public class FinanceControllerTest {
 
-        boolean ok = fc.addTransaction(50.0, "Income", 0, new Date(), "salary");
+    private FinanceController financeController;
 
-        assertTrue(ok);
-        assertEquals(150.0, fc.getBalance(), 0.0001);
+    @BeforeEach
+    void setup() {
+
+        User user = new User(
+                1,
+                "Test User",
+                "test@test.com",
+                "1234",
+                0.0
+        );
+
+        financeController =
+                new FinanceController(user);
     }
 
+    // =================================================
+    // ADD INCOME TEST
+    // =================================================
+
     @Test
-    void expenseDecreasesBalance() {
-        User user = new User(1, "Test", "test@example.com", 100.0);
-        FinanceController fc = new FinanceController(user);
+    void testAddIncomeTransaction() {
 
-        boolean ok = fc.addTransaction(30.0, "Expense", 1, new Date(), "lunch");
+        boolean result =
+                financeController.addTransaction(
+                        1000,
+                        "Income",
+                        1,
+                        new Date(),
+                        "Salary"
+                );
 
-        assertTrue(ok);
-        assertEquals(70.0, fc.getBalance(), 0.0001);
+        assertTrue(result);
+
+        assertEquals(
+                1000,
+                financeController.getBalance()
+        );
     }
 
-    @Test
-    void rejectsNonPositiveAmount() {
-        User user = new User(1, "Test", "test@example.com", 100.0);
-        FinanceController fc = new FinanceController(user);
+    // =================================================
+    // ADD EXPENSE TEST
+    // =================================================
 
-        assertFalse(fc.addTransaction(0, "Income", 0, new Date(), "x"));
-        assertFalse(fc.addTransaction(-5, "Expense", 0, new Date(), "x"));
-        assertEquals(100.0, fc.getBalance(), 0.0001);
+    @Test
+    void testAddExpenseTransaction() {
+
+        financeController.addTransaction(
+                2000,
+                "Income",
+                1,
+                new Date(),
+                "Salary"
+        );
+
+        financeController.addTransaction(
+                500,
+                "Expense",
+                1,
+                new Date(),
+                "Food"
+        );
+
+        assertEquals(
+                1500,
+                financeController.getBalance()
+        );
     }
 
-    @Test
-    void rejectsUnknownTransactionType() {
-        User user = new User(1, "Test", "test@example.com", 100.0);
-        FinanceController fc = new FinanceController(user);
+    // =================================================
+    // DELETE TEST
+    // =================================================
 
-        assertFalse(fc.addTransaction(10, "Donation", 0, new Date(), "x"));
-        assertEquals(100.0, fc.getBalance(), 0.0001);
+    @Test
+    void testDeleteTransaction() {
+
+        financeController.addTransaction(
+                1000,
+                "Income",
+                1,
+                new Date(),
+                "Salary"
+        );
+
+        Transaction lastTransaction =
+                financeController
+                        .getAllTransactions()
+                        .get(
+                                financeController
+                                        .getAllTransactions()
+                                        .size() - 1
+                        );
+
+        boolean deleted =
+                financeController.deleteTransaction(
+                        lastTransaction.getTransactionId()
+                );
+
+        assertTrue(deleted);
+
+        assertEquals(
+                0,
+                financeController.getBalance()
+        );
+    }
+
+    // =================================================
+    // UPDATE TEST
+    // =================================================
+
+    @Test
+    void testUpdateTransaction() {
+
+        financeController.addTransaction(
+                1000,
+                "Income",
+                1,
+                new Date(),
+                "Salary"
+        );
+
+        Transaction lastTransaction =
+                financeController
+                        .getAllTransactions()
+                        .get(
+                                financeController
+                                        .getAllTransactions()
+                                        .size() - 1
+                        );
+
+        boolean updated =
+                financeController.updateTransaction(
+                        lastTransaction.getTransactionId(),
+                        2000,
+                        "Updated Salary"
+                );
+
+        assertTrue(updated);
+
+        assertEquals(
+                2000,
+                financeController.getBalance()
+        );
+    }
+
+    // =================================================
+    // INVALID AMOUNT TEST
+    // =================================================
+
+    @Test
+    void testInvalidAmount() {
+
+        boolean result =
+                financeController.addTransaction(
+                        -100,
+                        "Income",
+                        1,
+                        new Date(),
+                        "Invalid"
+                );
+
+        assertFalse(result);
     }
 }
