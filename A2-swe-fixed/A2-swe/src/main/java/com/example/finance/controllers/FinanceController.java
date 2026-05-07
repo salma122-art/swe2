@@ -1,52 +1,73 @@
 package com.example.finance.controllers;
-import com.example.finance.models.Budget;
-import com.example.finance.models.Expense;
-import com.example.finance.models.Income;
-import com.example.finance.models.Transaction;
-import com.example.finance.models.User;
-import com.example.finance.service.BudgetService;
-import com.example.finance.service.NotificationService;
-import com.example.finance.service.ReportService;
-import com.example.finance.utils.JsonHandler;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.example.finance.models.Budget;
+import com.example.finance.models.Expense;
+import com.example.finance.models.Income;
+import com.example.finance.models.Transaction;
+import com.example.finance.models.User;
+import com.example.finance.services.BudgetService;
+import com.example.finance.services.NotificationService;
+import com.example.finance.services.ReportService;
+import com.example.finance.utils.JsonHandler;
+
 /**
  * Coordinates finance operations between the UI and the data layer.
- * Holds an in-memory view of transactions and budgets for the active user
- * and persists transactions and the user profile to the data/ directory.
  */
 public class FinanceController {
 
-    private final List<Transaction> transactions = new ArrayList<>();
-    private final List<Budget> budgets = new ArrayList<>();
+    private List<Transaction> transactions =
+            new ArrayList<>();
+
+    private List<Budget> budgets =
+            new ArrayList<>();
 
     private User user;
 
     // Services
-    private final BudgetService budgetService = new BudgetService();
-    private final NotificationService notificationService = new NotificationService();
-    private final ReportService reportService = new ReportService();
+    private final BudgetService budgetService =
+            new BudgetService();
+
+    private final NotificationService notificationService =
+            new NotificationService();
+
+    private final ReportService reportService =
+            new ReportService();
 
     /**
-     * Construct with an authenticated user.
+     * Construct with authenticated user.
      */
     public FinanceController(User user) {
+
         this.user = user;
+
+        JsonHandler.ensureDataDirectoryExists();
+
         seedDemoBudgets();
     }
 
+    /**
+     * Demo budgets.
+     */
     private void seedDemoBudgets() {
-        budgets.add(new Budget(1, 1000, "May"));
-        budgets.add(new Budget(2, 500, "May"));
+
+        if (budgets.isEmpty()) {
+
+            budgets.add(
+                    new Budget(1, 1000, "May")
+            );
+
+            budgets.add(
+                    new Budget(2, 500, "May")
+            );
+        }
     }
 
     /**
-     * Add an income or expense transaction.
-     *
-     * @return true if the transaction was added, false on validation failure.
+     * Add transaction.
      */
     public boolean addTransaction(double amount,
                                   String type,
@@ -54,8 +75,8 @@ public class FinanceController {
                                   Date date,
                                   String notes) {
 
-        // Validation
         if (amount <= 0 || type == null) {
+
             return false;
         }
 
@@ -90,82 +111,110 @@ public class FinanceController {
             user.updateBalance(-amount);
 
         } else {
+
             return false;
         }
 
         // Add transaction
         transactions.add(transaction);
 
-        // Check budget only for expenses
+        // Update budgets
+        budgetService.updateBudgetSpending(
+                transactions,
+                budgets
+        );
+
+        // Check limits
         if (transaction instanceof Expense) {
 
-            boolean exceeded = budgetService.isBudgetExceeded(
-                    transactions,
-                    budgets,
-                    categoryId,
-                    amount
-            );
+            boolean exceeded =
+                    budgetService.isBudgetExceeded(
+                            transactions,
+                            budgets,
+                            categoryId,
+                            amount
+                    );
 
             if (exceeded) {
+
                 notificationService.sendBudgetAlert();
             }
         }
 
-        // Save data
-        JsonHandler.ensureDataDirectoryExists();
-
+        // Save transactions
         JsonHandler.saveToFile(
                 "data/transactions_history.json",
                 transactions
         );
 
+        // Save users list
+        List<User> users =
+                AppContext.authController.getAllUsers();
+
         JsonHandler.saveToFile(
                 "data/user_profile.json",
-                user
+                users
         );
 
         return true;
     }
 
-    // Current Balance
+    // Balance
     public double getBalance() {
+
         return user.getBalance();
     }
 
     // Reports
     public double getTotalIncome() {
-        return reportService.calculateTotalIncome(transactions);
+
+        return reportService
+                .calculateTotalIncome(transactions);
     }
 
     public double getTotalExpenses() {
-        return reportService.calculateTotalExpenses(transactions);
+
+        return reportService
+                .calculateTotalExpenses(transactions);
     }
 
     public double getCalculatedBalance() {
-        return reportService.calculateBalance(transactions);
+
+        return reportService
+                .calculateBalance(transactions);
     }
 
     // Transactions
     public List<Transaction> getAllTransactions() {
+
         return transactions;
     }
 
     // Budgets
     public List<Budget> getBudgets() {
+
+        budgetService.updateBudgetSpending(
+                transactions,
+                budgets
+        );
+
         return budgets;
     }
 
     public void addBudget(Budget budget) {
+
         budgets.add(budget);
     }
 
     // User
     public User getUser() {
+
         return user;
     }
 
-    // Generate transaction ID
+    // Generate ID
     private int generateId() {
+
         return transactions.size() + 1;
     }
 }

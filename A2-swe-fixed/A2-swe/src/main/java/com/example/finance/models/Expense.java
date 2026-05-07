@@ -10,6 +10,11 @@ public class Expense extends Transaction {
 
     private int categoryId;
 
+    public Expense() {
+        super(0, 0.0, null, null);
+        this.categoryId = 0;
+    }
+
     public Expense(int transactionId, double amount, Date date, String notes, int categoryId) {
         super(transactionId, amount, date, notes);
         this.categoryId = categoryId;
@@ -17,6 +22,10 @@ public class Expense extends Transaction {
 
     public int getCategoryId() {
         return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     @Override

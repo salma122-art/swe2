@@ -2,6 +2,7 @@ package com.example.finance.ui;
 
 import com.example.finance.controllers.AppContext;
 import com.example.finance.models.User;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -29,33 +30,86 @@ public class LoginScreen extends Application {
         Button loginButton = new Button("Login");
 
         VBox root = new VBox(10);
+
         root.setStyle("-fx-padding: 20;");
-        root.getChildren().addAll(title, emailField, passwordField, loginButton, messageLabel);
+
+        root.getChildren().addAll(
+                title,
+                emailField,
+                passwordField,
+                loginButton,
+                messageLabel
+        );
 
         loginButton.setOnAction(e -> {
-            String email = emailField.getText();
-            String password = passwordField.getText();
 
-            boolean success = AppContext.authController.authenticate(email, password);
+            try {
 
-            if (success) {
-                User user = AppContext.authController.getUser(email);
-                AppContext.initFinanceController(user);
+                String email =
+                        emailField.getText();
 
-                messageLabel.setText("Login Success");
-                try {
-                    new DashboardScreen().start(stage);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                String password =
+                        passwordField.getText();
+
+                if (email == null
+                        || email.trim().isEmpty()
+                        || password == null
+                        || password.trim().isEmpty()) {
+
+                    messageLabel.setText(
+                            "Please enter email and password"
+                    );
+
+                    return;
                 }
-            } else {
-                messageLabel.setText("Invalid email or password");
+
+                boolean success =
+                        AppContext.authController
+                                .authenticate(
+                                        email.trim(),
+                                        password.trim()
+                                );
+
+                if (success) {
+
+                    User user =
+                            AppContext.authController
+                                    .getUser(
+                                            email.trim()
+                                    );
+
+                    AppContext.initFinanceController(user);
+
+                    messageLabel.setText(
+                            "Login Success"
+                    );
+
+                    new DashboardScreen().start(stage);
+
+                } else {
+
+                    messageLabel.setText(
+                            "Invalid email or password"
+                    );
+                }
+
+            } catch (Exception ex) {
+
+                ex.printStackTrace();
+
+                messageLabel.setText(
+                        "Login failed"
+                );
             }
         });
 
-        Scene scene = new Scene(root, 300, 250);
+        Scene scene =
+                new Scene(root, 320, 250);
+
         stage.setTitle("Login Screen");
+
         stage.setScene(scene);
+
         stage.show();
     }
 }

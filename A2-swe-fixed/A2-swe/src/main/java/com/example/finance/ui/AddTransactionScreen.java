@@ -45,39 +45,70 @@ public class AddTransactionScreen extends Application {
 
         saveButton.setOnAction(e -> {
             try {
-                String amountText = amountField.getText();
-                String type = typeChoice.getValue();
-                String categoryText = categoryField.getText();
-                String notes = notesField.getText();
 
-                if (amountText.isEmpty() || type == null || categoryText.isEmpty()) {
+                String amountText = amountField.getText().trim();
+                String type = typeChoice.getValue();
+                String categoryText = categoryField.getText().trim();
+                String notes = notesField.getText().trim();
+
+                if (amountText.isEmpty()
+                        || type == null
+                        || categoryText.isEmpty()) {
+
                     messageLabel.setText("Please fill all fields");
                     return;
                 }
 
-                double amount = Double.parseDouble(amountText.trim());
-                int categoryId = Integer.parseInt(categoryText.trim());
+                double amount = Double.parseDouble(amountText);
+
+                if (amount <= 0) {
+
+                    messageLabel.setText("Amount must be greater than 0");
+                    return;
+                }
+
+                int categoryId = Integer.parseInt(categoryText);
 
                 boolean success = AppContext.financeController.addTransaction(
-                        amount, type, categoryId, new Date(), notes
+                        amount,
+                        type,
+                        categoryId,
+                        new Date(),
+                        notes
                 );
 
                 if (success) {
+
                     messageLabel.setText("Transaction added successfully");
+
                     amountField.clear();
                     categoryField.clear();
                     notesField.clear();
                     typeChoice.setValue(null);
+
                 } else {
+
                     messageLabel.setText("Failed to add transaction");
                 }
 
             } catch (NumberFormatException ex) {
-                messageLabel.setText("⚠ Enter valid numbers only (Amount: 100, Category: 1)");
+
+                messageLabel.setText(
+                        "Enter valid numbers only"
+                );
+
+            } catch (Exception ex) {
+
+                messageLabel.setText(
+                        "Unexpected error occurred"
+                );
+
+                ex.printStackTrace();
             }
         });
 
         Scene scene = new Scene(root, 400, 350);
+
         stage.setTitle("Add Transaction");
         stage.setScene(scene);
         stage.show();

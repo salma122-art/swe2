@@ -8,12 +8,15 @@ com\example\finance\models\Notification.class
 com\example\finance\repositories\BaseRepository.class
 com\example\finance\controllers\LoginController.class
 com\example\finance\ui\AddTransactionScreen.class
+com\example\finance\utils\JsonHandler$2.class
 com\example\finance\controllers\AppContext.class
+com\example\finance\utils\JsonHandler$1.class
 com\example\finance\models\Budget.class
 com\example\finance\ui\BudgetScreen.class
 com\example\finance\Main.class
 com\example\finance\repositories\TransactionRepository.class
 com\example\finance\models\Transaction.class
+com\example\finance\services\ReportService.class
 com\example\finance\factories\TransactionFactory.class
 com\example\finance\controllers\FinanceController.class
 com\example\finance\repositories\UserRepository.class
@@ -21,6 +24,8 @@ com\example\finance\models\Expense.class
 com\example\finance\utils\JsonHandler.class
 com\example\finance\models\User.class
 com\example\finance\models\SavingsGoal.class
+com\example\finance\services\BudgetService.class
+com\example\finance\services\NotificationService.class
 com\example\finance\models\Income.class
 com\example\finance\models\Category.class
 com\example\finance\repositories\BudgetRepository.class

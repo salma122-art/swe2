@@ -12,6 +12,9 @@ public class Notification {
     private Date timestamp;
     private boolean isRead;
 
+    public Notification() {
+    }
+
     public Notification(int notificationId, String message) {
         this.notificationId = notificationId;
         this.message = message;
@@ -19,10 +22,37 @@ public class Notification {
         this.isRead = false;
     }
 
-    public int getNotificationId() { return notificationId; }
-    public String getMessage() { return message; }
-    public Date getTimestamp() { return timestamp; }
-    public boolean isRead() { return isRead; }
+    public int getNotificationId() {
+        return notificationId;
+    }
+
+    public void setNotificationId(int notificationId) {
+        this.notificationId = notificationId;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
+    }
 
     /**
      * Marks the notification as read by the user.

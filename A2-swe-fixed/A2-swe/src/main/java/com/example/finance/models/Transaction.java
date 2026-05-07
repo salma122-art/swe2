@@ -13,6 +13,9 @@ public abstract class Transaction {
     protected Date date;
     protected String notes;
 
+    public Transaction() {
+    }
+
     public Transaction(int transactionId, double amount, Date date, String notes) {
         this.transactionId = transactionId;
         this.amount = amount;
@@ -20,10 +23,37 @@ public abstract class Transaction {
         this.notes = notes;
     }
 
-    public double getAmount() { return amount; }
-    public int getTransactionId() { return transactionId; }
-    public Date getDate() { return date; }
-    public String getNotes() { return notes; }
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public int getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(int transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 
     /**
      * Abstract method to be implemented by subclasses to provide specific details.

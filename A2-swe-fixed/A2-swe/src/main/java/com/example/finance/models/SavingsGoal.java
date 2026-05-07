@@ -10,6 +10,9 @@ public class SavingsGoal {
     private double targetAmount;
     private double currentSaved;
 
+    public SavingsGoal() {
+    }
+
     public SavingsGoal(int goalId, String targetName, double targetAmount) {
         this.goalId = goalId;
         this.targetName = targetName;
@@ -17,10 +20,37 @@ public class SavingsGoal {
         this.currentSaved = 0.0;
     }
 
-    public int getGoalId() { return goalId; }
-    public String getTargetName() { return targetName; }
-    public double getTargetAmount() { return targetAmount; }
-    public double getCurrentSaved() { return currentSaved; }
+    public int getGoalId() {
+        return goalId;
+    }
+
+    public void setGoalId(int goalId) {
+        this.goalId = goalId;
+    }
+
+    public String getTargetName() {
+        return targetName;
+    }
+
+    public void setTargetName(String targetName) {
+        this.targetName = targetName;
+    }
+
+    public double getTargetAmount() {
+        return targetAmount;
+    }
+
+    public void setTargetAmount(double targetAmount) {
+        this.targetAmount = targetAmount;
+    }
+
+    public double getCurrentSaved() {
+        return currentSaved;
+    }
+
+    public void setCurrentSaved(double currentSaved) {
+        this.currentSaved = currentSaved;
+    }
 
     /**
      * Calculates the percentage of the goal achieved.
@@ -28,7 +58,9 @@ public class SavingsGoal {
      * @return A percentage value from 0 to 100.
      */
     public double calculateProgress() {
-        if (targetAmount <= 0) return 0;
+        if (targetAmount <= 0)
+            return 0;
+
         return (currentSaved / targetAmount) * 100;
     }
 

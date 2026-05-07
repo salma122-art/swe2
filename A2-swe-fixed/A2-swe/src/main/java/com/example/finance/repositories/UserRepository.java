@@ -18,7 +18,13 @@ public class UserRepository {
     public void load() {
         currentUser = JsonHandler.loadFromFile(FILE_NAME, User.class);
         if (currentUser == null) {
-            currentUser = new User(1, "Default User", "user@email.com", 0.0);
+          currentUser = new User(
+        1,
+        "Default User",
+        "user@email.com",
+        "password",
+        0.0
+);
             save();
         }
     }

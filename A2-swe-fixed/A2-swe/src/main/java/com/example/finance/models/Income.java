@@ -10,6 +10,11 @@ public class Income extends Transaction {
 
     private String source;
 
+    public Income() {
+        super(0, 0.0, null, null);
+        this.source = null;
+    }
+
     public Income(int transactionId, double amount, Date date, String notes, String source) {
         super(transactionId, amount, date, notes);
         this.source = source;
@@ -17,6 +22,10 @@ public class Income extends Transaction {
 
     public String getSource() {
         return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     /**

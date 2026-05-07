@@ -17,6 +17,9 @@ C:\Users\Al lewaa\source\repos\swe2\A2-swe-fixed\A2-swe\src\main\java\com\exampl
 C:\Users\Al lewaa\source\repos\swe2\A2-swe-fixed\A2-swe\src\main\java\com\example\finance\repositories\NotificationRepository.java
 C:\Users\Al lewaa\source\repos\swe2\A2-swe-fixed\A2-swe\src\main\java\com\example\finance\repositories\TransactionRepository.java
 C:\Users\Al lewaa\source\repos\swe2\A2-swe-fixed\A2-swe\src\main\java\com\example\finance\repositories\UserRepository.java
+C:\Users\Al lewaa\source\repos\swe2\A2-swe-fixed\A2-swe\src\main\java\com\example\finance\services\BudgetService.java
+C:\Users\Al lewaa\source\repos\swe2\A2-swe-fixed\A2-swe\src\main\java\com\example\finance\services\NotificationService.java
+C:\Users\Al lewaa\source\repos\swe2\A2-swe-fixed\A2-swe\src\main\java\com\example\finance\services\ReportService.java
 C:\Users\Al lewaa\source\repos\swe2\A2-swe-fixed\A2-swe\src\main\java\com\example\finance\ui\AddTransactionScreen.java
 C:\Users\Al lewaa\source\repos\swe2\A2-swe-fixed\A2-swe\src\main\java\com\example\finance\ui\BudgetScreen.java
 C:\Users\Al lewaa\source\repos\swe2\A2-swe-fixed\A2-swe\src\main\java\com\example\finance\ui\DashboardScreen.java

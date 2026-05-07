@@ -8,43 +8,108 @@ import java.util.List;
 
 /**
  * Handles authentication logic (login and register).
- * Demo-only: passwords are not actually checked.
  */
 public class AuthController {
 
-    private static final List<User> users = new ArrayList<>();
+    private static List<User> users = new ArrayList<>();
 
     public AuthController() {
-        if (users.isEmpty()) {
-            users.add(new User(1, "Ahmed Ali", "ahmed@gmail.com", 1000.0));
+
+        JsonHandler.ensureDataDirectoryExists();
+
+        List<User> loadedUsers =
+                JsonHandler.loadUsersFromFile(
+                        "data/user_profile.json"
+                );
+
+        if (loadedUsers != null
+                && !loadedUsers.isEmpty()) {
+
+            users = loadedUsers;
+
+        } else {
+
+            users.add(
+                    new User(
+                            1,
+                            "Ahmed Ali",
+                            "ahmed@gmail.com",
+                            "password",
+                            1000.0
+                    )
+            );
+
+            JsonHandler.saveToFile(
+                    "data/user_profile.json",
+                    users
+            );
         }
     }
 
     /**
-     * Authenticate by email only (demo project scope).
-     * In production this would verify a hashed password.
+     * Authenticate using email and password.
      */
-    public boolean authenticate(String email, String password) {
+    public boolean authenticate(String email,
+                                String password) {
+
         for (User user : users) {
-            if (user.getEmail().equals(email)) {
+
+            if (user.getEmail().equalsIgnoreCase(email)
+                    && user.getPassword().equals(password)) {
+
                 return true;
             }
         }
+
         return false;
     }
 
-    public void register(User user) {
+    /**
+     * Register new user.
+     */
+    public boolean register(User user) {
+
+        for (User existingUser : users) {
+
+            if (existingUser.getEmail()
+                    .equalsIgnoreCase(user.getEmail())) {
+
+                return false;
+            }
+        }
+
         users.add(user);
-        JsonHandler.ensureDataDirectoryExists();
-        JsonHandler.saveToFile("data/user_profile.json", users);
+
+        JsonHandler.saveToFile(
+                "data/user_profile.json",
+                users
+        );
+
+        return true;
     }
 
+    /**
+     * Get user by email.
+     */
     public User getUser(String email) {
+
         for (User user : users) {
-            if (user.getEmail().equals(email)) {
+
+            if (user.getEmail()
+                    .equalsIgnoreCase(email)) {
+
                 return user;
             }
         }
+
         return null;
+    }
+
+    /**
+     * Returns all users.
+     */
+    public List<User> getAllUsers() {
+
+        return users;
     }
 }

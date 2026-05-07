@@ -1,6 +1,9 @@
-{
-  "userId": 1,
-  "name": "Test",
-  "email": "test@example.com",
-  "totalBalance": 70.0
-}
+[
+  {
+    "userId": 1,
+    "name": "Ahmed Ali",
+    "email": "ahmed@gmail.com",
+    "password": "password",
+    "totalBalance": 5800.0
+  }
+]

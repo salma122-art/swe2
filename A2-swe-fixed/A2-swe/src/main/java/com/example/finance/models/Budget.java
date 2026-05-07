@@ -10,6 +10,9 @@ public class Budget {
     private double currentSpending;
     private String month;
 
+    public Budget() {
+    }
+
     public Budget(int budgetId, double limitAmount, String month) {
         this.budgetId = budgetId;
         this.limitAmount = limitAmount;
@@ -17,10 +20,37 @@ public class Budget {
         this.currentSpending = 0.0;
     }
 
-    public int getBudgetId() { return budgetId; }
-    public double getLimitAmount() { return limitAmount; }
-    public double getCurrentSpending() { return currentSpending; }
-    public String getMonth() { return month; }
+    public int getBudgetId() {
+        return budgetId;
+    }
+
+    public void setBudgetId(int budgetId) {
+        this.budgetId = budgetId;
+    }
+
+    public double getLimitAmount() {
+        return limitAmount;
+    }
+
+    public void setLimitAmount(double limitAmount) {
+        this.limitAmount = limitAmount;
+    }
+
+    public double getCurrentSpending() {
+        return currentSpending;
+    }
+
+    public void setCurrentSpending(double currentSpending) {
+        this.currentSpending = currentSpending;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
 
     /**
      * Add expense amount to current spending.
