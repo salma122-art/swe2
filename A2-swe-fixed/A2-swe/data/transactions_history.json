@@ -9,8 +9,22 @@
   {
     "categoryId": 1,
     "transactionId": 2,
-    "amount": 200.0,
+    "amount": 100.0,
     "date": "May 7, 2026, 5:14:20 PM",
+    "notes": "200-100"
+  },
+  {
+    "source": "Manual Income",
+    "transactionId": 3,
+    "amount": 3000.0,
+    "date": "May 7, 2026, 5:36:15 PM",
+    "notes": "food"
+  },
+  {
+    "categoryId": 2,
+    "transactionId": 4,
+    "amount": 1000.0,
+    "date": "May 7, 2026, 5:36:32 PM",
     "notes": "food"
   }
 ]

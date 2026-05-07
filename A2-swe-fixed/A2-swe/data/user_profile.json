@@ -3,7 +3,21 @@
     "userId": 1,
     "name": "Ahmed Ali",
     "email": "ahmed@gmail.com",
-    "password": "password",
-    "totalBalance": 5800.0
+    "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+    "totalBalance": 1000.0
+  },
+  {
+    "userId": 2,
+    "name": "sara",
+    "email": "sara@gmail.com",
+    "password": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+    "totalBalance": 2000.0
+  },
+  {
+    "userId": 3,
+    "name": "FATMA",
+    "email": "fatma@gmail.com",
+    "password": "1db4508f25d416925941f2ad9af8f5b20c991273c8f54acdd5c5dccbeed92ae4",
+    "totalBalance": 100.0
   }
 ]

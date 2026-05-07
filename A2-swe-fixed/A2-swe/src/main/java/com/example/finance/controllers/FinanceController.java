@@ -46,6 +46,11 @@ public class FinanceController {
 
         JsonHandler.ensureDataDirectoryExists();
 
+        transactions =
+                JsonHandler.loadTransactionsFromFile(
+                        "data/transactions_history.json"
+                );
+
         seedDemoBudgets();
     }
 
@@ -115,16 +120,13 @@ public class FinanceController {
             return false;
         }
 
-        // Add transaction
         transactions.add(transaction);
 
-        // Update budgets
         budgetService.updateBudgetSpending(
                 transactions,
                 budgets
         );
 
-        // Check limits
         if (transaction instanceof Expense) {
 
             boolean exceeded =
@@ -141,22 +143,124 @@ public class FinanceController {
             }
         }
 
-        // Save transactions
+        saveData();
+
+        return true;
+    }
+
+    /**
+     * Delete transaction by ID.
+     */
+    public boolean deleteTransaction(int transactionId) {
+
+        Transaction target = null;
+
+        for (Transaction t : transactions) {
+
+            if (t.getTransactionId() == transactionId) {
+
+                target = t;
+                break;
+            }
+        }
+
+        if (target == null) {
+
+            return false;
+        }
+
+        // restore balance
+        if (target instanceof Income) {
+
+            user.updateBalance(
+                    -target.getAmount()
+            );
+
+        } else if (target instanceof Expense) {
+
+            user.updateBalance(
+                    target.getAmount()
+            );
+        }
+
+        transactions.remove(target);
+
+        saveData();
+
+        return true;
+    }
+
+    /**
+     * Update transaction amount and notes.
+     */
+    public boolean updateTransaction(int transactionId,
+                                     double newAmount,
+                                     String newNotes) {
+
+        for (Transaction t : transactions) {
+
+            if (t.getTransactionId()
+                    == transactionId) {
+
+                // remove old effect
+                if (t instanceof Income) {
+
+                    user.updateBalance(
+                            -t.getAmount()
+                    );
+
+                } else if (t instanceof Expense) {
+
+                    user.updateBalance(
+                            t.getAmount()
+                    );
+                }
+
+                // update transaction
+                t.setAmount(newAmount);
+                t.setNotes(newNotes);
+
+                // apply new effect
+                if (t instanceof Income) {
+
+                    user.updateBalance(
+                            newAmount
+                    );
+
+                } else if (t instanceof Expense) {
+
+                    user.updateBalance(
+                            -newAmount
+                    );
+                }
+
+                saveData();
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Save all data.
+     */
+    private void saveData() {
+
         JsonHandler.saveToFile(
                 "data/transactions_history.json",
                 transactions
         );
 
-        // Save users list
         List<User> users =
-                AppContext.authController.getAllUsers();
+                AppContext.authController
+                        .getAllUsers();
 
         JsonHandler.saveToFile(
                 "data/user_profile.json",
                 users
         );
-
-        return true;
     }
 
     // Balance
@@ -217,4 +321,5 @@ public class FinanceController {
 
         return transactions.size() + 1;
     }
+    
 }

@@ -1,17 +1,19 @@
 package com.example.finance.controllers;
 
-import com.example.finance.models.User;
-import com.example.finance.utils.JsonHandler;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.example.finance.models.User;
+import com.example.finance.utils.JsonHandler;
+import com.example.finance.utils.PasswordUtil;
 
 /**
  * Handles authentication logic (login and register).
  */
 public class AuthController {
 
-    private static List<User> users = new ArrayList<>();
+    private static List<User> users =
+            new ArrayList<>();
 
     public AuthController() {
 
@@ -34,7 +36,9 @@ public class AuthController {
                             1,
                             "Ahmed Ali",
                             "ahmed@gmail.com",
-                            "password",
+                            PasswordUtil.hashPassword(
+                                    "password"
+                            ),
                             1000.0
                     )
             );
@@ -52,10 +56,15 @@ public class AuthController {
     public boolean authenticate(String email,
                                 String password) {
 
+        String hashedPassword =
+                PasswordUtil.hashPassword(password);
+
         for (User user : users) {
 
-            if (user.getEmail().equalsIgnoreCase(email)
-                    && user.getPassword().equals(password)) {
+            if (user.getEmail()
+                    .equalsIgnoreCase(email)
+                    && user.getPassword()
+                    .equals(hashedPassword)) {
 
                 return true;
             }
@@ -72,11 +81,19 @@ public class AuthController {
         for (User existingUser : users) {
 
             if (existingUser.getEmail()
-                    .equalsIgnoreCase(user.getEmail())) {
+                    .equalsIgnoreCase(
+                            user.getEmail()
+                    )) {
 
                 return false;
             }
         }
+
+        user.setPassword(
+                PasswordUtil.hashPassword(
+                        user.getPassword()
+                )
+        );
 
         users.add(user);
 

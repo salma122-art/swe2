@@ -13,17 +13,20 @@ public class BudgetService {
                                     int categoryId,
                                     double newExpenseAmount) {
 
-        double totalExpenses = newExpenseAmount;
+        double totalExpenses = 0;
 
         for (Transaction transaction : transactions) {
 
             if (transaction instanceof Expense expense) {
 
                 if (expense.getCategoryId() == categoryId) {
+
                     totalExpenses += expense.getAmount();
                 }
             }
         }
+
+        totalExpenses += newExpenseAmount;
 
         for (Budget budget : budgets) {
 
@@ -31,7 +34,7 @@ public class BudgetService {
 
                 budget.setCurrentSpending(totalExpenses);
 
-                return totalExpenses > budget.getLimitAmount();
+                return totalExpenses >= budget.getLimitAmount();
             }
         }
 

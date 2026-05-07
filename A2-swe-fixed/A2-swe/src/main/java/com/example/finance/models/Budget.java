@@ -65,7 +65,7 @@ public class Budget {
      * Checks if budget exceeded limit.
      */
     public boolean checkLimit() {
-        return currentSpending > limitAmount;
+        return currentSpending >= limitAmount;
     }
 
     /**

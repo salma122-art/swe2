@@ -6,12 +6,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.example.finance.models.Expense;
+import com.example.finance.models.Income;
 import com.example.finance.models.Transaction;
 import com.example.finance.models.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 /**
@@ -66,31 +72,8 @@ public class JsonHandler {
     }
 
     /**
-     * Load list using Type.
+     * Ensure data folder exists.
      */
-    public static <T> List<T> loadListFromFile(String fileName,
-                                               Type type) {
-
-        try (FileReader reader =
-                     new FileReader(fileName)) {
-
-            List<T> result =
-                    gson.fromJson(reader, type);
-
-            return result != null
-                    ? result
-                    : new ArrayList<>();
-
-        } catch (IOException e) {
-
-            return new ArrayList<>();
-        }
-    }
-
-    // ======================================================
-    // DATA DIRECTORY
-    // ======================================================
-
     public static void ensureDataDirectoryExists() {
 
         File dir = new File(DATA_DIR);
@@ -102,80 +85,9 @@ public class JsonHandler {
     }
 
     // ======================================================
-    // SAVE LIST
-    // ======================================================
-
-    public static <T> void saveListToFile(String fileName,
-                                          List<T> data) {
-
-        ensureDataDirectoryExists();
-
-        String fullPath =
-                DATA_DIR + fileName;
-
-        try (FileWriter writer =
-                     new FileWriter(fullPath)) {
-
-            gson.toJson(data, writer);
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        }
-    }
-
-    // ======================================================
-    // GENERIC LOAD LIST
-    // ======================================================
-
-    public static <T> List<T> loadListFromFile(
-            String fileName,
-            Class<T> classType) {
-
-        ensureDataDirectoryExists();
-
-        String fullPath =
-                DATA_DIR + fileName;
-
-        File file =
-                new File(fullPath);
-
-        if (!file.exists()) {
-
-            return new ArrayList<>();
-        }
-
-        try (FileReader reader =
-                     new FileReader(fullPath)) {
-
-            Type type =
-                    TypeToken.getParameterized(
-                            List.class,
-                            classType
-                    ).getType();
-
-            List<T> result =
-                    gson.fromJson(reader, type);
-
-            return result != null
-                    ? result
-                    : new ArrayList<>();
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-
-            return new ArrayList<>();
-        }
-    }
-
-    // ======================================================
     // USERS
     // ======================================================
 
-    /**
-     * Load users from JSON.
-     */
     public static List<User> loadUsersFromFile(
             String fileName) {
 
@@ -213,14 +125,135 @@ public class JsonHandler {
     // ======================================================
 
     /**
-     * Load transactions from JSON.
+     * Custom transaction loader.
      */
     public static List<Transaction>
     loadTransactionsFromFile(
             String fileName) {
 
+        List<Transaction> transactions =
+                new ArrayList<>();
+
         File file =
                 new File(fileName);
+
+        if (!file.exists()) {
+
+            return transactions;
+        }
+
+        try (FileReader reader =
+                     new FileReader(file)) {
+
+            JsonArray jsonArray =
+                    gson.fromJson(
+                            reader,
+                            JsonArray.class
+                    );
+
+            if (jsonArray == null) {
+
+                return transactions;
+            }
+
+            for (JsonElement element : jsonArray) {
+
+                JsonObject obj =
+                        element.getAsJsonObject();
+
+                double amount =
+                        obj.get("amount")
+                                .getAsDouble();
+
+                int transactionId =
+                        obj.get("transactionId")
+                                .getAsInt();
+
+                String notes =
+                        obj.get("notes")
+                                .getAsString();
+
+                Date date =
+                        gson.fromJson(
+                                obj.get("date"),
+                                Date.class
+                        );
+
+                // Expense
+                if (obj.has("categoryId")) {
+
+                    int categoryId =
+                            obj.get("categoryId")
+                                    .getAsInt();
+
+                    transactions.add(
+                            new Expense(
+                                    transactionId,
+                                    amount,
+                                    date,
+                                    notes,
+                                    categoryId
+                            )
+                    );
+                }
+
+                // Income
+                else if (obj.has("source")) {
+
+                    String source =
+                            obj.get("source")
+                                    .getAsString();
+
+                    transactions.add(
+                            new Income(
+                                    transactionId,
+                                    amount,
+                                    date,
+                                    notes,
+                                    source
+                            )
+                    );
+                }
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return transactions;
+    }
+
+    // ======================================================
+    // SAVE GENERIC LIST
+    // ======================================================
+
+    public static <T> void saveListToFile(
+            String fileName,
+            List<T> data) {
+
+        ensureDataDirectoryExists();
+
+        try (FileWriter writer =
+                     new FileWriter(fileName)) {
+
+            gson.toJson(data, writer);
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+    }
+
+    // ======================================================
+    // LOAD GENERIC LIST
+    // ======================================================
+
+    public static <T> List<T> loadListFromFile(
+            String fileName,
+            Class<T> classType) {
+
+        File file = new File(fileName);
 
         if (!file.exists()) {
 
@@ -231,14 +264,16 @@ public class JsonHandler {
                      new FileReader(file)) {
 
             Type type =
-                    new TypeToken<List<Transaction>>() {
-                    }.getType();
+                    TypeToken.getParameterized(
+                            List.class,
+                            classType
+                    ).getType();
 
-            List<Transaction> transactions =
+            List<T> result =
                     gson.fromJson(reader, type);
 
-            return transactions != null
-                    ? transactions
+            return result != null
+                    ? result
                     : new ArrayList<>();
 
         } catch (IOException e) {

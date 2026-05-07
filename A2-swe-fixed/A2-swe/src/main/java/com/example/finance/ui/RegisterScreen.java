@@ -12,12 +12,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class LoginScreen extends Application {
+public class RegisterScreen extends Application {
 
     @Override
     public void start(Stage stage) {
 
-        Label title = new Label("Login");
+        Label title = new Label("Create Account");
+
+        TextField nameField = new TextField();
+        nameField.setPromptText("Name");
 
         TextField emailField = new TextField();
         emailField.setPromptText("Email");
@@ -27,9 +30,9 @@ public class LoginScreen extends Application {
 
         Label messageLabel = new Label();
 
-        Button loginButton = new Button("Login");
+        Button registerButton = new Button("Register");
 
-        Button registerButton = new Button("Create Account");
+        Button backButton = new Button("Back To Login");
 
         VBox root = new VBox(10);
 
@@ -37,62 +40,60 @@ public class LoginScreen extends Application {
 
         root.getChildren().addAll(
                 title,
+                nameField,
                 emailField,
                 passwordField,
-                loginButton,
                 registerButton,
+                backButton,
                 messageLabel
         );
 
-        loginButton.setOnAction(e -> {
+        registerButton.setOnAction(e -> {
 
             try {
 
-                String email =
-                        emailField.getText();
+                String name = nameField.getText().trim();
+                String email = emailField.getText().trim();
+                String password = passwordField.getText().trim();
 
-                String password =
-                        passwordField.getText();
-
-                if (email == null
-                        || email.trim().isEmpty()
-                        || password == null
-                        || password.trim().isEmpty()) {
+                if (name.isEmpty()
+                        || email.isEmpty()
+                        || password.isEmpty()) {
 
                     messageLabel.setText(
-                            "Please enter email and password"
+                            "Please fill all fields"
                     );
 
                     return;
                 }
 
+                User user = new User(
+                        AppContext.authController
+                                .getAllUsers().size() + 1,
+                        name,
+                        email,
+                        password,
+                        0.0
+                );
+
                 boolean success =
                         AppContext.authController
-                                .authenticate(
-                                        email.trim(),
-                                        password.trim()
-                                );
+                                .register(user);
 
                 if (success) {
 
-                    User user =
-                            AppContext.authController
-                                    .getUser(
-                                            email.trim()
-                                    );
-
-                    AppContext.initFinanceController(user);
-
                     messageLabel.setText(
-                            "Login Success"
+                            "Account created successfully"
                     );
 
-                    new DashboardScreen().start(stage);
+                    nameField.clear();
+                    emailField.clear();
+                    passwordField.clear();
 
                 } else {
 
                     messageLabel.setText(
-                            "Invalid email or password"
+                            "Email already exists"
                     );
                 }
 
@@ -101,16 +102,16 @@ public class LoginScreen extends Application {
                 ex.printStackTrace();
 
                 messageLabel.setText(
-                        "Login failed"
+                        "Registration failed"
                 );
             }
         });
 
-        registerButton.setOnAction(e -> {
+        backButton.setOnAction(e -> {
 
             try {
 
-                new RegisterScreen().start(stage);
+                new LoginScreen().start(stage);
 
             } catch (Exception ex) {
 
@@ -118,10 +119,9 @@ public class LoginScreen extends Application {
             }
         });
 
-        Scene scene =
-                new Scene(root, 320, 300);
+        Scene scene = new Scene(root, 350, 320);
 
-        stage.setTitle("Login Screen");
+        stage.setTitle("Register");
 
         stage.setScene(scene);
 

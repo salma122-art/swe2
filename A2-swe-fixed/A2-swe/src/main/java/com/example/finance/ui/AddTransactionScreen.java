@@ -3,6 +3,7 @@ package com.example.finance.ui;
 import java.util.Date;
 
 import com.example.finance.controllers.AppContext;
+import com.example.finance.services.NotificationService;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -15,6 +16,9 @@ import javafx.stage.Stage;
 
 public class AddTransactionScreen extends Application {
 
+    private final NotificationService notificationService =
+            new NotificationService();
+
     @Override
     public void start(Stage stage) {
 
@@ -23,94 +27,167 @@ public class AddTransactionScreen extends Application {
         TextField amountField = new TextField();
         amountField.setPromptText("Amount");
 
-        ChoiceBox<String> typeChoice = new ChoiceBox<>();
-        typeChoice.getItems().addAll("Income", "Expense");
+        ChoiceBox<String> typeChoice =
+                new ChoiceBox<>();
 
-        TextField categoryField = new TextField();
-        categoryField.setPromptText("Category ID");
+        typeChoice.getItems().addAll(
+                "Income",
+                "Expense"
+        );
 
-        TextField notesField = new TextField();
-        notesField.setPromptText("Notes");
+        TextField categoryField =
+                new TextField();
 
-        Label messageLabel = new Label();
+        categoryField.setPromptText(
+                "Category ID"
+        );
 
-        Button saveButton = new Button("Save Transaction");
+        TextField notesField =
+                new TextField();
+
+        notesField.setPromptText(
+                "Notes"
+        );
+
+        Label messageLabel =
+                new Label();
+
+        Button saveButton =
+                new Button("Save Transaction");
 
         VBox root = new VBox(10);
-        root.setStyle("-fx-padding: 20;");
+
+        root.setStyle(
+                "-fx-padding: 20;"
+        );
+
         root.getChildren().addAll(
-                title, amountField, typeChoice, categoryField, notesField,
-                saveButton, messageLabel
+                title,
+                amountField,
+                typeChoice,
+                categoryField,
+                notesField,
+                saveButton,
+                messageLabel
         );
 
         saveButton.setOnAction(e -> {
+
             try {
 
-                String amountText = amountField.getText().trim();
-                String type = typeChoice.getValue();
-                String categoryText = categoryField.getText().trim();
-                String notes = notesField.getText().trim();
+                String amountText =
+                        amountField.getText().trim();
+
+                String type =
+                        typeChoice.getValue();
+
+                String categoryText =
+                        categoryField.getText().trim();
+
+                String notes =
+                        notesField.getText().trim();
 
                 if (amountText.isEmpty()
                         || type == null
                         || categoryText.isEmpty()) {
 
-                    messageLabel.setText("Please fill all fields");
+                    notificationService
+                            .showErrorNotification(
+                                    "Please fill all fields"
+                            );
+
                     return;
                 }
 
-                double amount = Double.parseDouble(amountText);
+                double amount =
+                        Double.parseDouble(
+                                amountText
+                        );
 
                 if (amount <= 0) {
 
-                    messageLabel.setText("Amount must be greater than 0");
+                    notificationService
+                            .showErrorNotification(
+                                    "Amount must be greater than 0"
+                            );
+
                     return;
                 }
 
-                int categoryId = Integer.parseInt(categoryText);
+                int categoryId =
+                        Integer.parseInt(
+                                categoryText
+                        );
 
-                boolean success = AppContext.financeController.addTransaction(
-                        amount,
-                        type,
-                        categoryId,
-                        new Date(),
-                        notes
-                );
+                boolean success =
+                        AppContext.financeController
+                                .addTransaction(
+                                        amount,
+                                        type,
+                                        categoryId,
+                                        new Date(),
+                                        notes
+                                );
 
                 if (success) {
 
-                    messageLabel.setText("Transaction added successfully");
+                    if (type.equalsIgnoreCase("Expense")
+                            && amount >= 5000) {
+
+                        notificationService
+                                .sendBudgetAlert();
+                    }
+
+                    notificationService
+                            .showSuccessNotification(
+                                    "Transaction added successfully"
+                            );
 
                     amountField.clear();
                     categoryField.clear();
                     notesField.clear();
+
                     typeChoice.setValue(null);
+
+                    messageLabel.setText(
+                            "Saved successfully"
+                    );
 
                 } else {
 
-                    messageLabel.setText("Failed to add transaction");
+                    notificationService
+                            .showErrorNotification(
+                                    "Failed to add transaction"
+                            );
                 }
 
             } catch (NumberFormatException ex) {
 
-                messageLabel.setText(
-                        "Enter valid numbers only"
-                );
+                notificationService
+                        .showErrorNotification(
+                                "Enter valid numbers only"
+                        );
 
             } catch (Exception ex) {
 
-                messageLabel.setText(
-                        "Unexpected error occurred"
-                );
+                notificationService
+                        .showErrorNotification(
+                                "Unexpected error occurred"
+                        );
 
                 ex.printStackTrace();
             }
         });
 
-        Scene scene = new Scene(root, 400, 350);
+        Scene scene =
+                new Scene(root, 400, 350);
 
-        stage.setTitle("Add Transaction");
+        stage.setTitle(
+                "Add Transaction"
+        );
+
         stage.setScene(scene);
+
         stage.show();
     }
 }
